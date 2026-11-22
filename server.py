@@ -1,9 +1,11 @@
+
 import os
 import yfinance as yf
 import ta
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("MultiAssetTrading")
+puerto = int(os.environ.get("PORT", 8000))
+mcp = FastMCP("MultiAssetTrading", host="0.0.0.0", port=puerto)
 
 def normalizar_ticker(simbolo: str, mercado: str) -> str:
     s = simbolo.upper().strip()
@@ -46,5 +48,4 @@ def analizar_activo(
     return f"Activo: {ticker_yf} ({intervalo})\n" + df[columnas].tail(40).to_csv()
 
 if __name__ == "__main__":
-    puerto = int(os.environ.get("PORT", 8000))
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=puerto)
+    mcp.run(transport="streamable-http")
